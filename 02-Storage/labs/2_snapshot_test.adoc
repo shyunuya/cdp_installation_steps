@@ -1,0 +1,45 @@
+....
+[edshin@ed01 ~]$ touch hello_Big_Data.txt
+[edshin@ed01 ~]$ hdfs dfs -mkdir /user/edshin/precious_dir
+[edshin@ed01 ~]$ hdfs dfs -put hello_Big_Data.txt /user/edshin/precious_dir
+[hdfs@ed01 ~]$ hdfs dfs -ls /user/edshin/precious_dir
+Found 1 items
+-rw-r--r--   3 edshin edshin          0 2020-10-01 22:47 /user/edshin/precious_dir/hello_Big_Data.txt
+[hdfs@ed01 ~]$ hdfs dfsadmin -allowSnapshot /user/edshin
+Allowing snapshot on /user/edshin succeeded
+[hdfs@ed01 ~]$
+[hdfs@ed01 ~]$
+[hdfs@ed01 ~]$ hdfs dfs -createSnapshot /user/edshin/ sebc-hdfs-test
+Created snapshot /user/edshin/.snapshot/sebc-hdfs-test
+[hdfs@ed01 ~]$
+[hdfs@ed01 ~]$ hdfs dfs -rmr /user/edshin/precious_dir
+rmr: DEPRECATED: Please use '-rm -r' instead.
+20/10/01 23:18:31 INFO fs.TrashPolicyDefault: Moved: 'hdfs://ed02.cloudera.com:8020/user/edshin/precious_dir' to trash at: hdfs://ed02.cloudera.com:8020/user/hdfs/.Trash/Current/user/edshin/precious_dir
+[hdfs@ed01 ~]$
+[hdfs@ed01 ~]$ hdfs dfs -ls /user/edshin
+Found 3 items
+drwx------   - edshin edshin          0 2020-10-01 22:32 /user/edshin/.staging
+drwxr-xr-x   - edshin edshin          0 2020-10-01 22:32 /user/edshin/hello
+drwxr-xr-x   - root   edshin          0 2020-09-29 12:13 /user/edshin/teragen
+[hdfs@ed01 ~]$ hdfs dfs -ls /user/edshin/.snapshot/sebc-hdfs-test
+Found 4 items
+drwx------   - edshin edshin          0 2020-10-01 22:32 /user/edshin/.snapshot/sebc-hdfs-test/.staging
+drwxr-xr-x   - edshin edshin          0 2020-10-01 22:32 /user/edshin/.snapshot/sebc-hdfs-test/hello
+drwxr-xr-x   - edshin edshin          0 2020-10-01 23:12 /user/edshin/.snapshot/sebc-hdfs-test/precious_dir
+drwxr-xr-x   - root   edshin          0 2020-09-29 12:13 /user/edshin/.snapshot/sebc-hdfs-test/teragen
+[hdfs@ed01 ~]$ hdfs dfs -cp -ptopax /user/edshin/.snapshot/sebc-hdfs-test/precious_dir /user/edshin/
+[hdfs@ed01 ~]$ hdfs dfs -ls /user/edshin
+Found 4 items
+drwx------   - edshin edshin          0 2020-10-01 22:32 /user/edshin/.staging
+drwxr-xr-x   - edshin edshin          0 2020-10-01 22:32 /user/edshin/hello
+drwxr-xr-x   - edshin edshin          0 2020-10-01 23:12 /user/edshin/precious_dir
+drwxr-xr-x   - root   edshin          0 2020-09-29 12:13 /user/edshin/teragen
+
+[hdfs@ed01 ~]$ hdfs dfs -rm /user/edshin/precious_dir/*
+20/10/01 23:26:50 INFO fs.TrashPolicyDefault: Moved: 'hdfs://ed02.cloudera.com:8020/user/edshin/precious_dir/hello_Big_Data.txt' to trash at: hdfs://ed02.cloudera.com:8020/user/hdfs/.Trash/Current/user/edshin/precious_dir/hello_Big_Data.txt1601620010026
+[hdfs@ed01 ~]$
+[hdfs@ed01 ~]$ hdfs dfs -cp -ptopax /user/edshin/.snapshot/sebc-hdfs-test/precious_dir/hello_Big_Data.txt /user/edshin/precious_dir/
+[hdfs@ed01 ~]$ hdfs dfs -ls /user/edshin/precious_dir
+Found 1 items
+-rw-r--r--   3 edshin edshin          0 2020-10-01 22:47 /user/edshin/precious_dir/hello_Big_Data.txt
+

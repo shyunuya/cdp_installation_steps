@@ -1,0 +1,72 @@
+== HDFS Lab Prepare
+
+* Create an Issue called `Storage labs`
+** Add it to the Lab milestone
+** Label the issue as `started`
+** Assign yourself to the Issue
+
+=== HDFS Lab: Replicate from another cluster
+
+For the exercises please use the following common cluster for data replication
+
+* CM URL: http://ccycloud-1.basecamp-source.root.hwx.site:7180
+* CM User: rep_user
+* CM User Password: makecdpgreatagain
+
+Perform the following tasks:
+
+* Name a source directory after your GitHub handle in root's home folder in HDFS
+* Use `teragen` to create a 500 MB file
+* Use `distCp` to copy your data onto the target cluster in the folder /user/rep_user/student_data/<your_github_id>
+** Use `hdfs fsck <path> -files -blocks` on your source and target directories
+** Copy the work for this lab into `/labs/0_replication.adoc`
+* Configure the cluster above as the BDR peer
+* Replicate all of the tables from the basecamp database onto your cluster
+* take a screenshot in HUE of all of the tables that were replicated and put in `/labs/0_bdr.png`
+
+=== HDFS Lab: Test HDFS throughput
+
+* Create an end-user Linux account named with your GitHub handle
+** Make sure this Linux account is added to all cluster nodes
+** Create an HDFS directory under `/user`
+** Run the following exercises under this user account
+* Create a 10 GB file using `teragen`
+** Set the number of mappers to four
+** Limit the block size to 32 MB
+** Land the output in your user's home directory
+* Report your work in `03-storage/labs/1_terasort_tests.adoc`
+
+=== HDFS Lab: Test HDFS Snapshots
+
+List the commands and output for each step below in `03-storage/labs/2_snapshot_test.adoc`.
+
+* create a text file locally with the text "hello Big Data"
+* Create a `precious` directory in HDFS; copy the text file into it.
+* Enable snapshots for `precious`
+** You can use cloudera Manager. go to hdfs -> File Browser
+* Create a snapshot called `sebc-hdfs-test`
+* Try to delete the directory
+* If the directory was deleted restore it from snapshot
+* Try to delete just the text file
+* Restore from snapshot what was deleted
+
+* Capture the NameNode web UI screen that lists snapshots in `labs/2_snapshot_list.png`.
+
+=== HDFS Lab: Enable HDFS HA
+
+* Use the Cloudera Manager wizard to enable HA
+** Once configured, get a screenshot of the HDFS Instances tab
+*** Hint: Follow closely the link:https://www.cloudera.com/documentation/enterprise/latest/topics/cdh_hag_hdfs_ha_enabling.html[Enabling HDFS HA Using Cloudera Manager] instructions. There's more work that needs to be done besides running the wizard.
+*** Use the 3rd server in your list to deploy the second Name Node. Use the first 3 hosts for journal nodes
+*** We don't have separate disks for the Journal Nodes hence `/dfs/jn` is a good path for them
+*** Name the file `03-storage/3_HDFS_HA.png`
+** If the File browsers does not work deploy reboot cloudera management services
+
+=== Close things out
+
+** Label the issue as `in review`
+
+
+
+
+
