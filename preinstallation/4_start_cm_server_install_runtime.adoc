@@ -1,0 +1,10 @@
+==== Start Cloudera Manager Server
+....
+$> sudo systemctl start cloudera-scm-server
+$> sudo systemctl enable cloudera-scm-server
+
+Checking log
+
+$> sudo tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
+
+

@@ -1,0 +1,80 @@
+=== Passwordless setup
+....
+Passwordless
+node 1
+a@A:~>ssh-keygen -t rsa
+enter
+
+a@A:~>ssh b@B mkdir -p .ssh
+b@B's password:
+a@A:~> cat .ssh/id_rsa.pub | ssh b@B 'cat >> .ssh/authorized_keys'
+
+....
+=== Checking ping
+....
+$> ansible all -m ping
+....
+
+=== Checkin swappiness
+
+....
+$> ansible all -m shell -a 'cat /proc/sys/vm/swappiness'
+....
+
+=== Change swappiness to value 1
+....
+$> ansible all -m shell -a 'sysctl vm.swappiness=1'
+....
+
+=== Checking Filesystem
+....
+$> ansible all -m shell -a 'df -T'
+
+$> findmnt -lo source,target,fstype,label,options,used -t ext4
+
+$> ansible all -m shell -a 'findmnt -lo source,target,fstype,label,options,used -t ext4'
+....
+
+=== Checking transparent_hugepage whether it's disabled or enabled
+....
+$> ansible all -m shell -a 'cat /sys/kernel/mm/transparent_hugepage/enabled'
+$> ansible all -m shell -a 'cat /sys/kernel/mm/transparent_hugepage/defrag'
+
+if it's not never
+$> echo never > /sys/kernel/mm/transparent_hugepage/enabled
+$> echo never > /sys/kernel/mm/transparent_hugepage/defrag
+....
+
+=== Checking network forward/reverse DNS
+
+if 'host' command does not work, then install bind-utils
+checking bind-utils
+....
+$> rpm -qa | grep -i bind-utils
+
+$> yum install -y bind-utils
+....
+
+Checking forward
+....
+$> host `hostname -f`
+....
+Checking reverse
+....
+$> host `hostname -i`
+$> dig -x `hostname -i`
+$> nslookup `hostname -i`
+....
+
+Firewall checkup
+....
+$> systemctl is-enabled firewalld
+$> systemctl disable firewalld
+$> systemctl stop firewalld
+....
+
+=== Selinux installation and bind-utils for dig command
+....
+ansible all -m shell -a 'yum install -y libselinux-utils'
+ansible all -m shell -a 'yum install -y bind-utils'
+....
