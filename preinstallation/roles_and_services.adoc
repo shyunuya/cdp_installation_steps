@@ -1,0 +1,14 @@
+|===
+|Utility Node 1 |Master 1 |Master 2 |Node 4 |Node5| Node6
+
+|Hive Gateway, HiveServer2, HiveServer2 on Tez, Hue, CM Service Monitor, CM Host Monitor, CM Reports Manager, CM Events Server, CM Alert Publisher, Tez Gateway, ZooKeeper
+|HDFS NameNode, Hive Gateway Tez Gateway
+|HDFS Secondary NameNode, Hive Gateway, Hive Metastore, Oozie, Tez Gateway, Yarn ResourceManager, Yarn JobHistory Server
+|HDFS DataNode, Hive Gateway, Tez Gateway, Yarn NodeManager
+|HDFS DataNode, Hive Gateway, Tez Gateway, Yarn NodeManager
+|HDFS DataNode, Hive Gateway, Tez Gateway, Yarn NodeManager
+|===
+
+https://docs.cloudera.com/cdp-private-cloud-base/7.1.4/installation/topics/cdpdc-prod-installation.html
+
+https://docs.cloudera.com/cloudera-manager/7.0.3/installation/topics/cdpdc-runtime-cluster-hosts-role-assignments.html
