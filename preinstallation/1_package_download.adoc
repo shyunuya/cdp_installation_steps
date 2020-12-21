@@ -11,7 +11,7 @@ $> tar xvfz cm7.1.4-redhat7.tar.gz -C /var/www/html/cloudera-repos/cm7 --strip-c
 $> sudo chmod -R ugo+rX /var/www/html/cloudera-repos/cm7
 
 Parcel download
-$> wget --recursive --no-parent --no-host-directories https://eb2bc2c4-3dd7-44df-95f5-1b03bd74a8e1:9d1b1bb4022d@archive.cloudera.com/p/cdh7/7.1.4.0/parcels/ -P /var/www/html/cloudera-repos
+$> wget --recursive --no-parent --no-host-directories https://[ID]:[PASSWORD]@archive.cloudera.com/p/cdh7/7.1.4.0/parcels/ -P /var/www/html/cloudera-repos
 ....
 
 ==== Run python webserver
