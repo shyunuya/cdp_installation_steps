@@ -1,0 +1,49 @@
+==== Package Download steps
+....
+
+$> mkdir -p /var/www/html/cloudera-repos/cm7
+
+id:eb2bc2c4-3dd7-44df-95f5-1b03bd74a8e1
+pw:9d1b1bb4022d
+
+$> wget https://[ID]:[PASSWORD]@archive.cloudera.com/p/cm7/7.1.4/repo-as-tarball/cm7.1.4-redhat7.tar.gz
+$> tar xvfz cm7.1.4-redhat7.tar.gz -C /var/www/html/cloudera-repos/cm7 --strip-components=1
+$> sudo chmod -R ugo+rX /var/www/html/cloudera-repos/cm7
+
+Parcel download
+$> wget --recursive --no-parent --no-host-directories https://[ID]:[PASSWORD]@archive.cloudera.com/p/cdh7/7.1.4.0/parcels/ -P /var/www/html/cloudera-repos
+
+curl -X DELETE http://yprod001.l42scl.hortonworks.com:9191/services/v1/applications/hshin
+curl -X GET http://yprod001.l42scl.hortonworks.com:9191/services/v1/applications/hshin
+....
+
+==== Run python webserver
+....
+$> cd /var/www/html
+$> python -m SimpleHTTPServer 8900
+
+Browser - http://<web_host>:8900/cloudera-repos/cm7
+....
+
+==== Configuring Hosts to Use the Internal Repository
+Create /etc/yum.repos.d/cloudera-repo.repo files on cluster hosts with the following content, where <web_server> is the hostname of the Web server.
+
+....
+[cloudera-repo]
+name=cloudera-repo
+baseurl=http://<web_server>/cloudera-repos/cm7
+enabled=1
+gpgcheck=0
+....
+
+==== Disable current repo for sec and enable cloudera-repo.
+....
+$> yum clean all
+$> yum search cloudera
+....
+
+==== Install Cloudera Manager Packages
+....
+yum install cloudera-manager-daemons cloudera-manager-agent cloudera-manager-server
+yum localinstall
+....

@@ -1,0 +1,5 @@
+==== cloudera jdk
+
+....
+Install jdk on CM server before install CM
+$> cd /usr/java

@@ -1,0 +1,40 @@
+=== Connect
+....
+$> sudo -u postgres psql -U postgres
+
+postgres=# CREATE ROLE scm LOGIN PASSWORD 'scm';
+postgres=# CREATE ROLE amon LOGIN PASSWORD 'amon';
+postgres=# CREATE ROLE rman LOGIN PASSWORD 'rman';
+postgres=# CREATE ROLE hue LOGIN PASSWORD 'hue';
+postgres=# CREATE ROLE hive LOGIN PASSWORD 'hive';
+postgres=# CREATE ROLE oozie LOGIN PASSWORD 'oozie';
+postgres=# CREATE ROLE das LOGIN PASSWORD 'das';
+postgres=# CREATE ROLE rangeradmin LOGIN PASSWORD 'rangeradmin';
+
+postgres=# CREATE DATABASE scm OWNER scm ENCODING 'UTF8';
+postgres=# CREATE DATABASE amon OWNER amon ENCODING 'UTF8';
+postgres=# CREATE DATABASE rman OWNER rman ENCODING 'UTF8';
+postgres=# CREATE DATABASE hue OWNER hue ENCODING 'UTF8';
+postgres=# CREATE DATABASE metastore OWNER hive ENCODING 'UTF8';
+postgres=# CREATE DATABASE oozie OWNER oozie ENCODING 'UTF8';
+postgres=# CREATE DATABASE das OWNER das ENCODING 'UTF8';
+postgres=# CREATE DATABASE ranger OWNER rangeradmin ENCODING 'UTF8';
+
+....
+Ranger setup
+....
+postgres=# GRANT ALL PRIVILEGES ON DATABASE ranger TO rangeradmin;
+....
+
+==== Install PostgreSQL JDBC driver
+....
+$> yum install postgresql-jdbc*
+
+Rename driver
+$> cp /usr/share/java/postgresql-jdbc.jar /usr/share/java/postgresql-connector-java.jar
+$> chmod 644 /usr/share/java/postgresql-connector-java.jar
+....
+
+==== Setting up scm_prepare_database
+$> cd /opt/cloudera/cm/schema
+$> ./scm_prepare_database.sh postgresql scm scm scm
