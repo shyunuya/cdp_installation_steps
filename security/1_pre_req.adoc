@@ -1,0 +1,39 @@
+==== pre
+link: https://docs.cloudera.com/cdp-private-cloud-base/7.1.4/security-how-to-guides/topics/cm-security-using-cm-sec-config.html +
+
+고객쪽에서 필요한 부분
+
+1. AD update - window 서버안에 있는건데 윈도우 업데이트 다 하라는말. 특히 보안 업데이트. 윈도우 업데이트
+CM 이 rootCA 가지고 ldaps로 연결해서 크리덴셜을 만든다. 그래서 보안 업데이트 해라.
+2. rootCA - 공인인증서를 발급해주는 최상위 기관에서 발급한다. CA 서비스를 등록. AD 쪽에서 하면된다.
+AD 에 rootCA 등록해달라고 하면됨.
+3. OU 등록 - 우리 dedicated OU 필요. 관리자는 여러개로 생성이 가능
+4. DNS 에 모든 호스트 등록. forward/reverse. 양방.
+DNS 서버가 있으면 거기에 등록. 없으면 AD 등록. /etc/resolv.conf. 최소 2개 이상.
+5. LDAP, Kerberos 포트
+
+TLS 요청)
+truststore <- rootCA PEM file. java base 는 PEM 을 못읽는다.
+keystore <- 인증서.
+
+1. CM/Hue/NiFi/Atlas/Ranger/SMM … 가 설치되어 있는 Server의 인증서(PEM format)와 RootCA(PEM format)요청 (edited)
+2. 모든노드 TLS가 필요하면 (예를 들면 CM Agent ) 모든 Server의 인증서(PEM format)와 RootCA(PEM format)요청
+
+ntp 서버 2대 이상.kudu, hbase 때문에.
+
+예외) Self-signed 와 Wildcard 인증서는 절대 권장하지 않음
+
+HA 반드시 권장하는 콤포넌트) NTP, AD, DNS
+HAProxy는 비추 반드시 Hardware LB 사용권장
+
+
+CLOUDERA OU 및에 컴퓨터 OU
+
+realm join -
+
+AD domain
+
+AD 접속 안된다고 하면 클라이언트
+
+provisioning...?
+

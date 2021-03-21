@@ -1,0 +1,14 @@
+====
+AD 생성할 때 user, group, ou name 대소문자 조심.
+LDAP group 가져올때도 대소문자 조
+
+HBase Master: Failed to become active master
+So ZK is working fine. Perfect.
+Make sure HBase is down and clear everything:
+
+```
+ hadoop fs -rm -r /hbase/*
+ echo "rmr /hbase" | zookeeper-client
+```
+
+Then try to start HBase.

@@ -1,0 +1,61 @@
+==== Do this after HA and Kerberos
+https://docs.cloudera.com/cdp-private-cloud-base/7.1.5/security-ranger-configuring-advanced/topics/security-ranger-configuring-admin-ha-without-ssl.html
+
+===== Keytab creation
+
+Find HTTP, rangeradmin principals for SPNEGO +
+HTTP <- where HaProxy is installed +
+Rangeradmin <- where ranger admin servers at +
+
+```
+HaProxy server
+mkdir -p /opt/cloduera/security/keytabs
+$> find /var/run/ -name mapred.keytab
+$> cp <keytab> /opt/cloudera/security/keytabs
+
+Ranger server 1
+$> find /ver/run/ -name ranger.keytab
+$> cp <keytab> /opt/cloudera/security/keytabs/ranger-server1.keytab
+$> scp ranger-server1.keytab root@Util.com:/opt/cloudra/security/keytabs
+
+Ranger server 2
+$> find /ver/run/ -name ranger.keytab
+$> cp <keytab> /opt/cloudera/security/keytabs/ranger-server2.keytab
+$> scp ranger-server2.keytab root@Util.com:/opt/cloudra/security/keytabs
+
+```
+
+Combine three keytabs
+Keytab must contain following principals : +
+HTTP/util.com@Realm.com +
+rangeradmin/ranger-server1.com@Realm.com +
+rangeradmin/ranger-server2.com@Realm.com +
+```
+Util server
+$> cd /opt/cloudera/security/keytabs
+$> ktutil
+$> rkt mapred.keytab
+$> rkt ranger-server1.keytab
+$> rkt ranger-server2.keytab
+$> delent <mapred_princ_kvno>
+Check list
+$> l
+Write down in one keytab
+$> wkt /opt/cloudera/security/keytabs/ranger-ha.keytab
+```
+
+Place newly created keytab to Ranger servers
+```
+$> scp /opt/cloudera/security/keytabs/ranger-ha.keytab root@ranger-server1:/opt/cloudera/security/keytabs
+$> scp /opt/cloudera/security/keytabs/ranger-ha.keytab root@ranger-server2:/opt/cloudera/security/keytabs
+
+Permission
+chmod 440 /etc/security/keytabs/ranger-ha.keytab
+chown ranger:hadoop /etc/security/keytabs/ranger-ha.keytab
+```
+
+=== Add below properties in ranger-admin-site from CM > Ranger > Configurations and restart required services +
+ranger.spnego.kerberos.principal=* +
+ranger.spnego.kerberos.keytab=/opt/cloudera/security/ranger-ha-ktpass.keytab +
+ranger.ha.spnego.kerberos.keytab=/opt/cloudera/security/ranger-ha-ktpass.keytab +
+
